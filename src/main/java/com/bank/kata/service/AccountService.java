@@ -7,5 +7,7 @@ public interface AccountService {
 
     public AccountPreview deposit(Long amount) throws OperationException;
 
+    public AccountPreview withdrawal(Long amount) throws OperationException;
+
 
 }

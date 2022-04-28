@@ -37,4 +37,9 @@ public class AccountServiceImpl implements AccountService{
 
         return accountMapper.mapAccount(account);
     }
+
+    @Override
+    public AccountPreview withdrawal(Long amount) throws OperationException {
+        return null;
+    }
 }

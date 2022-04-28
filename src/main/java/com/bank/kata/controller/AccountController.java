@@ -22,9 +22,17 @@ public class AccountController {
     @PatchMapping("/deposit/{amount}")
     private ResponseEntity<AccountPreview> deposit(@PathVariable Long amount)throws OperationException {
 
-
         AccountPreview accountPreview = accountService.deposit(amount);
 
         return new ResponseEntity<>(accountPreview, HttpStatus.CREATED);
     }
+
+    @PatchMapping("/withdrawal/{amount}")
+    private ResponseEntity<AccountPreview> withdrawal(@PathVariable  Long amount)throws OperationException {
+
+        AccountPreview accountPreview = accountService.withdrawal(amount);
+
+        return new ResponseEntity<>(accountPreview, HttpStatus.CREATED);
+    }
+
 }

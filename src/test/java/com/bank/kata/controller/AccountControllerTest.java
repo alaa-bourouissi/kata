@@ -46,4 +46,20 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.date", Matchers.is("2022-01-01")));
     }
 
+    @Test
+    public void withdrawal() throws Exception {
+        AccountPreview accountPreview = new AccountPreview();
+        accountPreview.setDate(LocalDate.parse("2022-01-01"));
+        accountPreview.setBalance(100L);
+        Mockito.when(
+                accountService.withdrawal(Mockito.anyLong())).thenReturn(accountPreview);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .patch("/account/withdrawal/10")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.balance", Matchers.is(100)))
+                .andExpect(jsonPath("$.date", Matchers.is("2022-01-01")));
+    }
+
 }
