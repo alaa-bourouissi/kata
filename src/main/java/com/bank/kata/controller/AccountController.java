@@ -2,15 +2,15 @@ package com.bank.kata.controller;
 
 
 import com.bank.kata.exception.OperationException;
+import com.bank.kata.model.Transaction;
 import com.bank.kata.presentation.AccountPreview;
 import com.bank.kata.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/account")
@@ -33,6 +33,12 @@ public class AccountController {
         AccountPreview accountPreview = accountService.withdrawal(amount);
 
         return new ResponseEntity<>(accountPreview, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/transactions")
+    private ResponseEntity<List<Transaction>> getAllTransactions(){
+
+        return  ResponseEntity.ok(accountService.getTransactions());
     }
 
 }

@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -40,6 +41,32 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountPreview withdrawal(Long amount) throws OperationException {
+        Long actualBalance = account.getBalance() - amount;
+        Transaction transaction = new Transaction();
+        AccountMapper accountMapper = Mappers.getMapper(AccountMapper.class);
+
+        if (actualBalance < -decouvert){
+            throw new OperationException(OperationException.SPENDING_LIMIT_REACHED);
+        }else if ((amount < 0)){
+            throw new OperationException(OperationException.AMOUNT_MUST_NOT_BE_NEGATIVE);
+        }else {
+
+            LocalDate  date =  LocalDate.now();
+
+            transaction.setType(TransactionType.WITHDRAWAL);
+            transaction.setAmount(amount);
+            transaction.setDate(date);
+            transaction.setBalance(actualBalance);
+
+            account.setBalance(actualBalance);
+            account.setDate(date);
+            account.getAccountHistory().getTransactions().add(transaction);
+        }
+        return accountMapper.mapAccount(account);
+    }
+
+    @Override
+    public List<Transaction> getTransactions() {
         return null;
     }
 }
