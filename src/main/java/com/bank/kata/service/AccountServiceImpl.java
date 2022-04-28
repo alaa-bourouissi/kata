@@ -67,6 +67,6 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public List<Transaction> getTransactions() {
-        return null;
+        return account.getAccountHistory().getTransactions();
     }
 }
