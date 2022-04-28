@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,41 +39,37 @@ class AccountControllerTest {
     @Test
     public void deposit() throws Exception {
         AccountPreview accountPreview = new AccountPreview();
-        accountPreview.setDate(LocalDate.parse("2022-01-01"));
-        accountPreview.setBalance(150L);
+        accountPreview.setBalance(new BigDecimal(150));
         Mockito.when(
-                accountService.deposit(Mockito.anyLong())).thenReturn(accountPreview);
+                accountService.deposit(Mockito.any())).thenReturn(accountPreview);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .patch("/account/deposit/10")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder).andExpect(status().isCreated())
-                .andExpect(jsonPath("$.balance", Matchers.is(150)))
-                .andExpect(jsonPath("$.date", Matchers.is("2022-01-01")));
+                .andExpect(jsonPath("$.balance", Matchers.is(150)));
     }
 
     @Test
     public void withdrawal() throws Exception {
         AccountPreview accountPreview = new AccountPreview();
-        accountPreview.setDate(LocalDate.parse("2022-01-01"));
-        accountPreview.setBalance(100L);
+        accountPreview.setBalance(new BigDecimal(100));
         Mockito.when(
-                accountService.withdrawal(Mockito.anyLong())).thenReturn(accountPreview);
+                accountService.withdrawal(Mockito.any())).thenReturn(accountPreview);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .patch("/account/withdrawal/10")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder).andExpect(status().isCreated())
-                .andExpect(jsonPath("$.balance", Matchers.is(100)))
-                .andExpect(jsonPath("$.date", Matchers.is("2022-01-01")));
+                .andExpect(jsonPath("$.balance", Matchers.is(100)));
     }
 
     @Test
     public void getAllTransactions() throws Exception {
         List<Transaction> transactions = new ArrayList<>();
         Transaction transaction1 = new Transaction();
-        transaction1.setAmount(10L);
-        transaction1.setBalance(10L);
+        transaction1.setAmount(new BigDecimal(10));
+        transaction1.setBalance(new BigDecimal(10));
         transaction1.setType(TransactionType.DEPOSIT);
         transaction1.setDate(LocalDate.now());
         transactions.add(transaction1);

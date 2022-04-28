@@ -1,29 +1,21 @@
 package com.bank.kata.presentation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class AccountPreview {
 
-    private LocalDate date;
 
-    private Long balance;
+    private BigDecimal balance;
 
     public AccountPreview() {
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

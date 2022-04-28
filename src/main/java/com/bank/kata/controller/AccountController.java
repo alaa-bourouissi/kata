@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class AccountController {
     AccountService accountService;
 
     @PatchMapping("/deposit/{amount}")
-    private ResponseEntity<AccountPreview> deposit(@PathVariable Long amount)throws OperationException {
+    private ResponseEntity<AccountPreview> deposit(@PathVariable BigDecimal amount)throws OperationException {
 
         AccountPreview accountPreview = accountService.deposit(amount);
 
@@ -28,7 +29,7 @@ public class AccountController {
     }
 
     @PatchMapping("/withdrawal/{amount}")
-    private ResponseEntity<AccountPreview> withdrawal(@PathVariable  Long amount)throws OperationException {
+    private ResponseEntity<AccountPreview> withdrawal(@PathVariable  BigDecimal amount)throws OperationException {
 
         AccountPreview accountPreview = accountService.withdrawal(amount);
 

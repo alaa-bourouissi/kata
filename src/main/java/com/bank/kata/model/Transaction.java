@@ -1,16 +1,17 @@
 package com.bank.kata.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Transaction {
 
     private TransactionType type;
 
-    private Long amount;
+    private BigDecimal amount;
 
     private LocalDate date;
 
-    private Long balance;
+    private BigDecimal balance;
 
     public Transaction() {
     }
@@ -23,11 +24,11 @@ public class Transaction {
         this.type = type;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -39,11 +40,11 @@ public class Transaction {
         this.date = date;
     }
 
-    public Long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

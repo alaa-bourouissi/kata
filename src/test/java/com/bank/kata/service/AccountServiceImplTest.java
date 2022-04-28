@@ -8,6 +8,7 @@ import com.bank.kata.presentation.AccountPreview;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,17 +22,17 @@ class AccountServiceImplTest {
         AccountService accountService = new AccountServiceImpl();
         //given new account has balance = 0
         //when
-        AccountPreview accountPreview = accountService.deposit(10L);
+        AccountPreview accountPreview = accountService.deposit(new BigDecimal(10));
         //then
         assertNotNull(accountPreview);
-        assertEquals(10,accountPreview.getBalance());
+        assertEquals(new BigDecimal(10),accountPreview.getBalance());
     }
 
     @Test
     public void deposit_exception_amount_negative() {
         AccountService accountService = new AccountServiceImpl();
         Exception exception = assertThrows(OperationException.class, () -> {
-            accountService.deposit(-10L);;
+            accountService.deposit(new BigDecimal(10).negate());;
         });
 
         String expectedMessage = "Le montant doit etre positif";
@@ -45,17 +46,17 @@ class AccountServiceImplTest {
         AccountService accountService = new AccountServiceImpl();
         //given new account has balance = 0
         //when
-        AccountPreview accountPreview = accountService.withdrawal(10L);
+        AccountPreview accountPreview = accountService.withdrawal(new BigDecimal(10));
         //then
         assertNotNull(accountPreview);
-        assertEquals(-10,accountPreview.getBalance());
+        assertEquals(new BigDecimal(10).negate(),accountPreview.getBalance());
     }
 
     @Test
     public void withdrawal_exception_plafond() {
         AccountService accountService = new AccountServiceImpl();
         Exception exception = assertThrows(OperationException.class, () -> {
-            accountService.withdrawal(101L);;
+            accountService.withdrawal(new BigDecimal(101));;
         });
         String expectedMessage = "vous avez atteint le plafond de retrait autorisé";
         String actualMessage = exception.getMessage();
@@ -67,7 +68,7 @@ class AccountServiceImplTest {
     public void withdrawal_exception_amount_negative() {
         AccountService accountService = new AccountServiceImpl();
         Exception exception = assertThrows(OperationException.class, () -> {
-            accountService.withdrawal(-10L);;
+            accountService.withdrawal(new BigDecimal(10).negate());;
         });
         String expectedMessage = "Le montant doit etre positif";
         String actualMessage = exception.getMessage();
@@ -82,24 +83,24 @@ class AccountServiceImplTest {
         Account account = new Account();
         //given new account has balance = 0
         //when
-        accountService.deposit(100L);
-        accountService.deposit(150L);
-        accountService.withdrawal(50L);
+        accountService.deposit(new BigDecimal(100));
+        accountService.deposit(new BigDecimal(150));
+        accountService.withdrawal(new BigDecimal(50));
 
         List<Transaction> transactions = accountService.getTransactions();
         //then
         assertNotNull(transactions);
         assertEquals(3,transactions.size());
-        assertEquals(100,transactions.get(0).getAmount());
-        assertEquals(100,transactions.get(0).getBalance());
+        assertEquals(new BigDecimal(100),transactions.get(0).getAmount());
+        assertEquals(new BigDecimal(100),transactions.get(0).getBalance());
         assertEquals(TransactionType.DEPOSIT,transactions.get(0).getType());
 
-        assertEquals(150,transactions.get(1).getAmount());
-        assertEquals(250,transactions.get(1).getBalance());
+        assertEquals(new BigDecimal(150),transactions.get(1).getAmount());
+        assertEquals(new BigDecimal(250),transactions.get(1).getBalance());
         assertEquals(TransactionType.DEPOSIT,transactions.get(1).getType());
 
-        assertEquals(50,transactions.get(2).getAmount());
-        assertEquals(200,transactions.get(2).getBalance());
+        assertEquals(new BigDecimal(50),transactions.get(2).getAmount());
+        assertEquals(new BigDecimal(200),transactions.get(2).getBalance());
         assertEquals(TransactionType.WITHDRAWAL,transactions.get(2).getType());
     }
 

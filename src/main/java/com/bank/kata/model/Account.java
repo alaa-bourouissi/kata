@@ -1,5 +1,6 @@
 package com.bank.kata.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Account {
@@ -10,12 +11,10 @@ public class Account {
 
     private AccountHistory accountHistory;
 
-    private LocalDate date;
-
-    private Long balance;
+    private BigDecimal balance;
 
     public Account() {
-        this.balance= 0L;
+        this.balance= new BigDecimal(0);
         this.accountHistory = new AccountHistory();
     }
 
@@ -43,19 +42,11 @@ public class Account {
         this.accountHistory = accountHistory;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

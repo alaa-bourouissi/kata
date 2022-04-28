@@ -9,6 +9,7 @@ import com.bank.kata.presentation.AccountPreview;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,11 +17,11 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService{
 
     public   Account account = new Account();
-    private static Long decouvert = 100L;
+    private static BigDecimal decouvert = new BigDecimal(100);
 
     @Override
-    public AccountPreview deposit(Long amount) throws OperationException {
-        if ((amount < 0)){
+    public AccountPreview deposit(BigDecimal amount) throws OperationException {
+        if ( amount.compareTo(BigDecimal.ZERO) < 0 ){
             throw new OperationException(OperationException.AMOUNT_MUST_NOT_BE_NEGATIVE);
         }
         LocalDate date =  LocalDate.now();
@@ -30,9 +31,8 @@ public class AccountServiceImpl implements AccountService{
         transaction.setAmount(amount);
         transaction.setDate(date);
 
-        account.setBalance(account.getBalance()+amount);
+        account.setBalance(account.getBalance().add(amount));
         transaction.setBalance(account.getBalance());
-        account.setDate(date);
         account.getAccountHistory().getTransactions().add(transaction);
         AccountMapper accountMapper = Mappers.getMapper(AccountMapper.class);
 
@@ -40,14 +40,14 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public AccountPreview withdrawal(Long amount) throws OperationException {
-        Long actualBalance = account.getBalance() - amount;
+    public AccountPreview withdrawal(BigDecimal amount) throws OperationException {
+        BigDecimal actualBalance = account.getBalance().subtract(amount);
         Transaction transaction = new Transaction();
         AccountMapper accountMapper = Mappers.getMapper(AccountMapper.class);
 
-        if (actualBalance < -decouvert){
+        if (actualBalance.compareTo(decouvert.negate()) == -1 ){
             throw new OperationException(OperationException.SPENDING_LIMIT_REACHED);
-        }else if ((amount < 0)){
+        }else if ((amount.compareTo(BigDecimal.ZERO) < 0 )){
             throw new OperationException(OperationException.AMOUNT_MUST_NOT_BE_NEGATIVE);
         }else {
 
@@ -59,7 +59,6 @@ public class AccountServiceImpl implements AccountService{
             transaction.setBalance(actualBalance);
 
             account.setBalance(actualBalance);
-            account.setDate(date);
             account.getAccountHistory().getTransactions().add(transaction);
         }
         return accountMapper.mapAccount(account);
